@@ -35,7 +35,7 @@
         <v-card-text style="white-space: pre-line" v-html="copyText" />
         <v-card-actions>
           <v-row>
-            <v-col>
+            <v-col sm="12" order-sm="2">
               <v-btn block @click="dialogCopiar=false" color="grey darken-2" dark>
                 <v-icon left>
                   {{ mdiClose }}
@@ -43,7 +43,7 @@
                 Cerrar
               </v-btn>
             </v-col>
-            <v-col>
+            <v-col sm="12" order-sm="1">
               <v-btn block @click="textToClipboard" color="success">
                 <v-icon left>
                   {{ copied? mdiClipboardCheck: mdiClipboardText }}
@@ -292,7 +292,8 @@ export default {
       'Apruebo: ' + this.votosApruebo + '\n' +
       'Rechazo: ' + this.votosRechazo + '\n' +
       'Nulo: ' + this.votosNulo + '\n' +
-      'Blanco: ' + this.votosBlanco
+      'Blanco: ' + this.votosBlanco + '\n' +
+      'Total: ' + this.votosTotal;
    }
   },
   methods: {
