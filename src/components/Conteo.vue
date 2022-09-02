@@ -29,11 +29,11 @@
         <v-card-title>
           <v-icon left>{{mdiClipboardText}}</v-icon>Copiar a Portapaples
         </v-card-title>
-        <v-card-subtitle>
+        <v-card-subtitle class="py-3">
           Copiar resultados ingresados a portapapeles de su dispositivo
         </v-card-subtitle>
         <v-card-text style="white-space: pre-line" v-html="copyText" />
-        <v-card-actions>
+        <v-card-actions class="py-3">
           <v-row>
             <v-col cols="12" md="6" order="2" order-md="1">
               <v-btn block @click="dialogCopiar=false" color="grey darken-2" dark>
