@@ -298,8 +298,8 @@ export default {
   },
   methods: {
     textToClipboard(){
+      this.initVibrate();
       navigator.clipboard.writeText(this.copyText).then(()=> {
-        console.log('Async: Copying to clipboard was successful!');
         this.copyBtnText = 'Copia Correcta';
         this.copied = true;
       }, function(err) {
