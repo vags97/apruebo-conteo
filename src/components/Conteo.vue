@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-dialog v-model="dialogLimpiar">
+    <v-dialog v-model="dialogLimpiar" max-width="600px">
       <v-card>
         <v-card-title>
           Limpiar
@@ -22,6 +22,37 @@
             </v-col>
           </v-row>
         </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogCopiar" max-width="600px">
+      <v-card>
+        <v-card-title>
+          <v-icon left>{{mdiClipboardText}}</v-icon>Copiar a Portapaples
+        </v-card-title>
+        <v-card-subtitle>
+          Copiar resultados ingresados a portapapeles de su dispositivo
+        </v-card-subtitle>
+        <v-card-text style="white-space: pre-line" v-html="copyText" />
+        <v-card-actions>
+          <v-row>
+            <v-col>
+              <v-btn block @click="dialogCopiar=false" color="grey darken-2" dark>
+                <v-icon left>
+                  {{ mdiClose }}
+                </v-icon>
+                Cerrar
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn block @click="textToClipboard" color="success">
+                <v-icon left>
+                  {{ copied? mdiClipboardCheck: mdiClipboardText }}
+                </v-icon>
+                {{ copyBtnText }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-row justify="center">
@@ -161,8 +192,16 @@
           </v-card-text>
           <p class="text-center"><b>Votos totales:</b> {{ votosTotal }}</p>
           <v-card-actions>
-            <v-row>
-              <v-col cols="12" md="6">
+            <v-row justify="center">
+              <v-col cols="12" lg="4" md="8" sm="8">
+                <v-btn color="success" block @click="dialogCopiar=true">
+                  <v-icon left>
+                    {{ mdiClipboardText }}
+                  </v-icon>
+                  Copiar a Portapapeles
+                </v-btn>
+              </v-col>
+              <v-col cols="12" lg="4" md="6" sm="6">
                 <v-btn color="grey darken-2" dark block @click="lado === 'diestro'? lado = 'zurdo': lado = 'diestro'">
                   <v-icon left>
                     {{ lado === 'diestro'? mdiArrowLeft: mdiArrowRight }}
@@ -170,7 +209,7 @@
                   Cambiar Lado
                 </v-btn>
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col cols="12" lg="4" md="6" sm="6">
                 <v-btn color="warning" block @click="dialogLimpiar=true">
                   <v-icon left>
                     {{ mdiDelete }}
@@ -187,7 +226,7 @@
 </template>
 
 <script>
-import { mdiPlus, mdiMinus, mdiDelete, mdiClose, mdiArrowLeft, mdiArrowRight } from '@mdi/js'
+import { mdiPlus, mdiMinus, mdiDelete, mdiClose, mdiArrowLeft, mdiArrowRight, mdiClipboardText,mdiClipboardCheck } from '@mdi/js'
 
 export default {
   name: 'Conteo',
@@ -199,11 +238,16 @@ export default {
       mdiClose,
       mdiArrowLeft,
       mdiArrowRight,
+      mdiClipboardText,
+      mdiClipboardCheck,
       votosApruebo: 0,
       votosRechazo: 0,
       votosNulo: 0,
       votosBlanco: 0,
       dialogLimpiar: false,
+      dialogCopiar: false,
+      copyBtnText: 'Copiar',
+      copied: false,
       lado: 'diestro'
     }
   },
@@ -233,14 +277,34 @@ export default {
     },
     votosBlanco(aVotosBlanco) {
       localStorage.votosBlanco = aVotosBlanco;
+    },
+    dialogCopiar(){
+      this.copyBtnText = 'Copiar';
+      this.copied = false;
     }
   },
   computed: {
    votosTotal() {
     return this.votosApruebo + this.votosRechazo + this.votosNulo + this.votosBlanco;
+   },
+   copyText(){
+    return 'Votos:\n'+
+      'Apruebo: ' + this.votosApruebo + '\n' +
+      'Rechazo: ' + this.votosRechazo + '\n' +
+      'Nulo: ' + this.votosNulo + '\n' +
+      'Blanco: ' + this.votosBlanco
    }
   },
   methods: {
+    textToClipboard(){
+      navigator.clipboard.writeText(this.copyText).then(()=> {
+        console.log('Async: Copying to clipboard was successful!');
+        this.copyBtnText = 'Copia Correcta';
+        this.copied = true;
+      }, function(err) {
+        alert('No se pudo copiar texto: ', err);
+      });
+    },
     reset() {
       this.votosApruebo = 0
       this.votosRechazo = 0
