@@ -264,6 +264,7 @@ export default {
     if (localStorage.votosBlanco) {
       this.votosBlanco = parseInt(localStorage.votosBlanco) || 0;
     }
+    this.$gtm.trackView('MyScreenName', 'Conteo');
   },
   watch: {
     votosApruebo(avotosApruebo) {
@@ -329,6 +330,13 @@ export default {
         }
       }
       this.initVibrate(options)
+      this.$gtm.trackEvent({
+        event: null,
+        category: tipo,
+        action: numero,
+        label: 'Conteo',
+        value: 5000
+      });
       switch (tipo) {
         case 'apruebo':
           if (this.votosApruebo + numero < 0) return this.votosApruebo = 0

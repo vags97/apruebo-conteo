@@ -22,7 +22,7 @@
     <v-main>
       <Conteo/>
     </v-main>
-    <v-footer fixed>
+    <v-footer>
       <a style="text-decoration: none" href="https://conteo.seguimos.cl" target="_blank" class="black--text">
         Clonada de 🌳 Conteo Seguimos - Desarrolladas por Vicente Gamboa
       </a>
